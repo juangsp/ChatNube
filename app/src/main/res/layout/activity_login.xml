@@ -34,7 +34,8 @@
         android:layout_marginTop="74dp"
         android:layout_below="@+id/passwordField"
         android:layout_centerHorizontal="true"
-        android:background="#ff2a64ff" />
+        android:background="#ff2a64ff"
+        android:onClick="enviar"/>
 
     <TextView
         android:layout_width="wrap_content"
