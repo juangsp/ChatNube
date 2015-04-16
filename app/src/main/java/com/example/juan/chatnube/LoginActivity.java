@@ -53,7 +53,7 @@ public class LoginActivity extends Activity {
             String title=String.format(getString(R.string.title));
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
-                    Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                    Intent intent=new Intent(LoginActivity.this,MainActivity2.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
