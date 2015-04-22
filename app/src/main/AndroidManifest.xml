@@ -32,7 +32,22 @@
             android:parentActivityName=".LoginActivity"
             android:screenOrientation="portrait" >
         </activity>
-
+        <activity
+            android:name=".FriendsFragment"
+            android:label="@string/title_activity_friends_fragment" >
+        </activity>
+        <activity
+            android:name=".EditFriendsActivity"
+            android:label="@string/title_activity_edit_friends"
+            android:parentActivityName=".MainActivity2" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.juan.chatnube.MainActivity2" />
+        </activity>
+        <activity
+            android:name=".ChatActivity"
+            android:label="@string/title_activity_chat" >
+        </activity>
     </application>
 
 </manifest>

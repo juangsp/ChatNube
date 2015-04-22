@@ -86,7 +86,7 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main_activity2, menu);
         return true;
     }
 
@@ -110,6 +110,14 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
 
 
             return true;
+        }
+
+        if(id==R.id.action_find){
+            Intent i=new Intent(this,EditFriendsActivity.class);
+            i.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -144,7 +152,16 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
         @Override
         public Fragment getItem(int position) {
 
-            return PlaceholderFragment.newInstance(position + 1);
+            switch(position){
+
+                case 0:
+                    return new InboxFragment();
+                case 1:
+                    return new FriendsFragment();
+
+            }
+            return null;
+
         }
 
         @Override
@@ -170,17 +187,11 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
+  /*  public static class PlaceholderFragment extends Fragment {
+
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
+
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -198,7 +209,7 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
             View rootView = inflater.inflate(R.layout.fragment_main_activity2, container, false);
             return rootView;
         }
-    }
+    }*/
 
 
 }
