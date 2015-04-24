@@ -92,6 +92,7 @@ public class FriendsFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra("id_destinatario",mUser.get(position).getObjectId());
+        intent.putExtra("nombre_remitente",mUser.get(position).getUsername());
         startActivity(intent);
     }
 

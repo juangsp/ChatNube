@@ -63,7 +63,6 @@ public class EditFriendsActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
     public void buscar(View v) {
         query= ParseUser.getQuery();
         query.whereEqualTo("email",recuadro.getText().toString());
@@ -80,11 +79,9 @@ public class EditFriendsActivity extends ActionBarActivity {
                         nombre.setText(user.getUsername().toString());
                         friend=user;
                     }
-
                 }else{
 
                     Toast.makeText(EditFriendsActivity.this, "El contacto no existe", Toast.LENGTH_SHORT).show();
-
 
                 }
 
@@ -95,8 +92,6 @@ public class EditFriendsActivity extends ActionBarActivity {
     }
 
     public void agregar(View v){
-
-
         mCurrentUser=ParseUser.getCurrentUser();
         friendRelation=mCurrentUser.getRelation("friendsRelation");
         friendRelation.add(friend);
