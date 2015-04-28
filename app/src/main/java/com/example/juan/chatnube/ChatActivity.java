@@ -15,6 +15,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -31,6 +32,8 @@ public class ChatActivity extends ActionBarActivity {
     String accion="";
     String mensaje="";
     String nombre_remitente="";
+    ParseRelation<ParseUser> friendRelation;
+    ParseUser friend;
     //ArrayList<String> mensajes=new ArrayList();
 
     EditText texto;
@@ -47,12 +50,38 @@ public class ChatActivity extends ActionBarActivity {
         nombre_remitente=extras.getString("nombre_remitente");
         mCurrentUser=ParseUser.getCurrentUser();
         ID_REMITENTE=mCurrentUser.getObjectId();
+        ArrayList<String>mensajes=new ArrayList();
+        ArrayList<String>usuarios=new ArrayList();
+
+        ContactDataSource dataSource=new ContactDataSource(this.getApplicationContext());
+
+         usuarios=dataSource.readContact();
+        for(int i=0;i<usuarios.size();i++){
+
+            if(usuarios.get(i).toString()!=nombre_remitente){
+
+               /* mCurrentUser=ParseUser.getCurrentUser();
+                friendRelation=mCurrentUser.getRelation("friendsRelation");
+                friendRelation.add(friend);*/
+
+                dataSource.addContact(nombre_remitente);
+                dataSource.createTables(nombre_remitente);
 
 
-        cuadro.setText(cuadro.getText().toString()+ Html.fromHtml("<br />")+mensaje);
+
+            }
+
+        }
+
+       /* mensajes=dataSource.readMessages(nombre_remitente);
+
+        for(int i=0;i<mensajes.size();i++){
+            cuadro.setText(cuadro.getText().toString()+ Html.fromHtml("<br />")+mensajes.get(i).toString());
+
+        }*/
 
 
-
+       // cuadro.setText(cuadro.getText().toString()+ Html.fromHtml("<br />")+mensaje);
 
 
     }
@@ -71,7 +100,7 @@ public class ChatActivity extends ActionBarActivity {
 
         ParseQuery<ParseObject> query=ParseQuery.getQuery("message");
         query.whereEqualTo("nombre_remitente",nombre_remitente);
-        query.addDescendingOrder("createdAt");
+       // query.addDescendingOrder("createdAt");
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -104,10 +133,16 @@ public class ChatActivity extends ActionBarActivity {
 
     public void mandar(View v){
         MESSAGE=texto.getText().toString();
+
+
+
+        ContactDataSource dataSource=new ContactDataSource(this.getApplicationContext());
+        dataSource.addMessages(nombre_remitente,MESSAGE,"12/10/2012");
         ParseObject message=createMessage();
 
         if(message!=null){
             send(message);
+
             cuadro.setText(cuadro.getText().toString()+ Html.fromHtml("<br />")+MESSAGE);
             texto.setText("");
 
@@ -122,6 +157,8 @@ public class ChatActivity extends ActionBarActivity {
         message.put("nombre_remitente",ParseUser.getCurrentUser().getUsername());
         message.put("id_remitente",ID_REMITENTE);
         message.put("mensaje",MESSAGE);
+
+
 
         return message;
 

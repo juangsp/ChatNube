@@ -69,6 +69,8 @@ public class InboxFragment extends ListFragment {
                 mMessages=parseObjects;
 
                 for(ParseObject message:mMessages){
+
+
                     nombres.add(message.getString("nombre_remitente"));
                     adapter.add(message.getString("nombre_remitente")+ Html.fromHtml("<br />")+message.getString("mensaje"));
                 }

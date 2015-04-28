@@ -31,6 +31,7 @@ public class EditFriendsActivity extends ActionBarActivity {
     ParseUser mCurrentUser;
     ParseUser friend;
     List<ParseUser> mList;
+    String usuario="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +76,8 @@ public class EditFriendsActivity extends ActionBarActivity {
                     mList=list;
 
                     for(ParseUser user:mList){
-
-                        nombre.setText(user.getUsername().toString());
+                        usuario=user.getUsername().toString();
+                        nombre.setText(usuario);
                         friend=user;
                     }
                 }else{
@@ -95,6 +96,9 @@ public class EditFriendsActivity extends ActionBarActivity {
         mCurrentUser=ParseUser.getCurrentUser();
         friendRelation=mCurrentUser.getRelation("friendsRelation");
         friendRelation.add(friend);
+        ContactDataSource dataSource=new ContactDataSource(this.getApplicationContext());
+        dataSource.addContact( nombre.getText().toString());
+        dataSource.createTables( nombre.getText().toString());
 
         mCurrentUser.saveInBackground(new SaveCallback() {
             @Override
