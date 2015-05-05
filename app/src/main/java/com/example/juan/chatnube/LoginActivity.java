@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -20,6 +21,7 @@ import com.parse.SignUpCallback;
 
 public class LoginActivity extends Activity {
     private Button enviar;
+    private TextView registro;
     private EditText nombre;
     private EditText contrasena;
     private String nom;
@@ -34,6 +36,8 @@ public class LoginActivity extends Activity {
         nombre=(EditText)findViewById(R.id.usernameField);
         contrasena=(EditText)findViewById(R.id.passwordField);
         enviar=(Button)findViewById(R.id.singUpButton);
+        registro=(TextView)findViewById(R.id.registrotextView);
+
 
 
 
@@ -72,9 +76,6 @@ public class LoginActivity extends Activity {
         }
 
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -100,6 +101,8 @@ public class LoginActivity extends Activity {
     public void SingUpOnClick(View v){
     Intent in=new Intent(this,SingUp_activity.class);
         startActivity(in);
+        registro.setVisibility(View.INVISIBLE);
+
 
     }
 }

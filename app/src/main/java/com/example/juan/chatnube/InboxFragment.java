@@ -1,9 +1,16 @@
 package com.example.juan.chatnube;
 
 
+
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+
+import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +80,21 @@ public class InboxFragment extends ListFragment {
 
                     nombres.add(message.getString("nombre_remitente"));
                     adapter.add(message.getString("nombre_remitente")+ Html.fromHtml("<br />")+message.getString("mensaje"));
+                   /* NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(getActivity())
+                                    .setSmallIcon(android.R.drawable.btn_star)
+                                    .setLargeIcon((((BitmapDrawable)getResources()
+                                            .getDrawable(R.drawable.simbolo_infinito)).getBitmap()))
+                                    .setContentTitle("Wayta")
+                                    .setContentText("\"nombre_remitente\")+ Html.fromHtml(\"<br />\")+message.getString(\"mensaje\")")
+                                    .setContentInfo("Tiene un mensaje nuevo");
+                    Intent notIntent =
+                            new Intent(getActivity(), InboxFragment.class);
+                    PendingIntent contIntent =
+                            PendingIntent.getActivity(
+                                   getActivity(), 0, notIntent, 0);
+                    mBuilder.setContentIntent(contIntent);*/
+
                 }
 
                 spinner.setVisibility(View.INVISIBLE);
@@ -81,14 +103,16 @@ public class InboxFragment extends ListFragment {
         });
     }
 
+
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Intent intent = new Intent(getActivity(), ChatActivity.class);
-        //intent.putStringArrayListExtra("mensajes", mensajes);
-        //intent.putExtra("mensajes", mMessages.get(position).get("mensaje").toString());
         intent.putExtra("id_destinatario",mMessages.get(position).getObjectId());
         intent.putExtra("nombre_remitente",nombres.get(position).toString());
         startActivity(intent);
+
+
     }
 }

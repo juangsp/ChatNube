@@ -75,7 +75,7 @@ public class SingUp_activity extends Activity {
                 public void done(ParseException e) {
                     if(e==null){
                         Toast.makeText(SingUp_activity.this,"Subido Correctamente",Toast.LENGTH_SHORT).show();
-                        ContactDataSource dataSource=new ContactDataSource(getApplicationContext(),nom);
+                        ContactDataSource dataSource=new ContactDataSource(getApplicationContext());
                         Intent intent=new Intent(SingUp_activity.this,MainActivity2.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

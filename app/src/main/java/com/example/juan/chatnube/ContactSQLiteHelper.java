@@ -11,7 +11,7 @@ import android.widget.Toast;
  * Created by carlosfernandez on 08/03/15.
  */
 public class ContactSQLiteHelper extends SQLiteOpenHelper {
-     String database_name = "";
+    static final String DATABASE_NAME = "conversaciones.db";
     static final int DATABASE_VERSION = 1;
     String message_table="";
     static final String CONTACT_TABLE="contactos";
@@ -31,9 +31,9 @@ public class ContactSQLiteHelper extends SQLiteOpenHelper {
 
 
 
-    public ContactSQLiteHelper(Context context, String database_name) {
-        super(context, database_name, null, DATABASE_VERSION);
-        this.database_name = database_name;
+    public ContactSQLiteHelper(Context context) {
+        super(context,DATABASE_NAME, null, DATABASE_VERSION);
+
 
     }
 

@@ -20,22 +20,9 @@ public class ContactDataSource {
     private String name="";
 
 
-    public ContactDataSource(Context context,String name) {
-        mContext = context;
-        database_name="conversaciones_"+name+".db";
-
-        contactSQLiteHelper=new ContactSQLiteHelper(mContext,database_name);
-
-    }
     public ContactDataSource(Context context) {
         mContext = context;
-        //database_name="conversaciones_"+name+".db";
-
-        contactSQLiteHelper=new ContactSQLiteHelper(mContext,database_name);
-
-    }
-
-    public ContactDataSource(){
+        contactSQLiteHelper=new ContactSQLiteHelper(mContext);
 
     }
 
@@ -72,7 +59,7 @@ public class ContactDataSource {
 
         contactValues.put(ContactSQLiteHelper.COLUMN_USUARIO, usuario);
         contactValues.put(ContactSQLiteHelper.COLUMN_MENSAJE, mensaje);
-        contactValues.put(ContactSQLiteHelper.COLUMN_FECHA,fecha);
+        contactValues.put(ContactSQLiteHelper.COLUMN_FECHA, fecha);
 
         long memeID;
         memeID=database.insert(usuario,null,contactValues);
@@ -148,6 +135,8 @@ public class ContactDataSource {
         close(database);
 
     }
+
+
     public SQLiteDatabase openWriteable() {
         return contactSQLiteHelper.getWritableDatabase();
     }

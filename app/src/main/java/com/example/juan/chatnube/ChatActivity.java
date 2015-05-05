@@ -1,7 +1,9 @@
 package com.example.juan.chatnube;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,20 +12,17 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ChatActivity extends ActionBarActivity {
+public class ChatActivity extends Activity {
     ParseUser mCurrentUser;
     List<ParseObject> mMessages;
     public String ID_REMITENTE="";
@@ -32,10 +31,10 @@ public class ChatActivity extends ActionBarActivity {
     String accion="";
     String mensaje="";
     String nombre_remitente="";
-    ParseRelation<ParseUser> friendRelation;
-    ParseUser friend;
-    //ArrayList<String> mensajes=new ArrayList();
-
+    ArrayList<String>mensajes=new ArrayList();
+    ArrayList<String>usuarios=new ArrayList();
+    ChatFragment fragment;
+    ArrayAdapter adapter;
     EditText texto;
     TextView cuadro;
 
@@ -50,39 +49,13 @@ public class ChatActivity extends ActionBarActivity {
         nombre_remitente=extras.getString("nombre_remitente");
         mCurrentUser=ParseUser.getCurrentUser();
         ID_REMITENTE=mCurrentUser.getObjectId();
-        ArrayList<String>mensajes=new ArrayList();
-        ArrayList<String>usuarios=new ArrayList();
+        Bundle arguments = new Bundle();
+        arguments.putString("nombre_remitente", nombre_remitente);
 
-        ContactDataSource dataSource=new ContactDataSource(this.getApplicationContext());
-
-         usuarios=dataSource.readContact();
-        for(int i=0;i<usuarios.size();i++){
-
-            if(usuarios.get(i).toString()!=nombre_remitente){
-
-               /* mCurrentUser=ParseUser.getCurrentUser();
-                friendRelation=mCurrentUser.getRelation("friendsRelation");
-                friendRelation.add(friend);*/
-
-                dataSource.addContact(nombre_remitente);
-                dataSource.createTables(nombre_remitente);
-
-
-
-            }
-
-        }
-
-       /* mensajes=dataSource.readMessages(nombre_remitente);
-
-        for(int i=0;i<mensajes.size();i++){
-            cuadro.setText(cuadro.getText().toString()+ Html.fromHtml("<br />")+mensajes.get(i).toString());
-
-        }*/
-
-
-       // cuadro.setText(cuadro.getText().toString()+ Html.fromHtml("<br />")+mensaje);
-
+        fragment = ChatFragment.newInstance(arguments);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(android.R.id.content, fragment, "ChatFragment");
+        ft.commit();
 
     }
 
@@ -94,27 +67,8 @@ public class ChatActivity extends ActionBarActivity {
         return true;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
 
-        ParseQuery<ParseObject> query=ParseQuery.getQuery("message");
-        query.whereEqualTo("nombre_remitente",nombre_remitente);
-       // query.addDescendingOrder("createdAt");
 
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                mMessages=parseObjects;
-
-                for(ParseObject message:mMessages){
-                    cuadro.setText(cuadro.getText().toString()+ Html.fromHtml("<br />")+message.getString("mensaje").toString());
-
-                }
-
-            }
-        });
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -133,22 +87,15 @@ public class ChatActivity extends ActionBarActivity {
 
     public void mandar(View v){
         MESSAGE=texto.getText().toString();
-
-
-
         ContactDataSource dataSource=new ContactDataSource(this.getApplicationContext());
         dataSource.addMessages(nombre_remitente,MESSAGE,"12/10/2012");
         ParseObject message=createMessage();
-
         if(message!=null){
             send(message);
-
-            cuadro.setText(cuadro.getText().toString()+ Html.fromHtml("<br />")+MESSAGE);
+            adapter=fragment.getAdapter();
+            adapter.add(MESSAGE);
             texto.setText("");
-
-
         }
-
     }
 
     public ParseObject createMessage(){
