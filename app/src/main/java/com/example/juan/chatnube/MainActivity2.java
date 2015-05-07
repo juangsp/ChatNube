@@ -1,8 +1,15 @@
 package com.example.juan.chatnube;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -11,14 +18,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 public class MainActivity2 extends ActionBarActivity implements ActionBar.TabListener {
 
@@ -36,6 +49,8 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    static String s= Context.NOTIFICATION_SERVICE;
+    NotificationManager mNotificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +95,7 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
             i.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
+
     }
 
 
@@ -122,6 +138,45 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+   protected void onResume() {
+        super.onResume();
+
+
+        ParseQuery<ParseObject> query=ParseQuery.getQuery("message");
+        query.whereEqualTo("id_destinatario", ParseUser.getCurrentUser().getObjectId());
+        query.addDescendingOrder("createdAt");
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                final int mensajes;
+
+                if (e == null&& parseObjects.size()>1) {
+                   mensajes= parseObjects.size();
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(MainActivity2.this)
+                                    .setSmallIcon(android.R.drawable.btn_star)
+                                    .setLargeIcon((((BitmapDrawable) getResources()
+                                            .getDrawable(R.drawable.simbolo_infinito)).getBitmap()))
+                                    .setContentTitle("Wayta")
+                                    .setContentInfo("Tiene "+mensajes+" mensaje(s) nuevo(s)");
+                    Intent notIntent =
+                            new Intent(MainActivity2.this, MainActivity2.class);
+                    PendingIntent contIntent =
+                            PendingIntent.getActivity(
+                                   MainActivity2.this, 0, notIntent, 0);
+                    mBuilder.setContentIntent(contIntent);
+                     mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager.notify(1, mBuilder.build());
+                }
+            }
+        });
+
+
+    }
+
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {

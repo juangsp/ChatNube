@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -18,13 +17,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-
 ;import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +38,8 @@ public class InboxFragment extends ListFragment {
     String nombre="";
     String mensaje="";
 
+
+
     public InboxFragment() {
 
     }
@@ -51,7 +50,6 @@ public class InboxFragment extends ListFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main_activity2, container, false);
         spinner=(ProgressBar)rootView.findViewById(R.id.progressBar);
-
         spinner.setVisibility(View.GONE);
 
         return rootView;
@@ -67,40 +65,31 @@ public class InboxFragment extends ListFragment {
         setListAdapter(adapter);
 
         ParseQuery<ParseObject> query=ParseQuery.getQuery("message");
-        query.whereEqualTo("id_destinatario",ParseUser.getCurrentUser().getObjectId());
+        query.whereEqualTo("id_destinatario", ParseUser.getCurrentUser().getObjectId());
         query.addDescendingOrder("createdAt");
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
-                mMessages=parseObjects;
+                mMessages = parseObjects;
 
-                for(ParseObject message:mMessages){
+                if (e == null) {
+                    for (ParseObject message : mMessages) {
+                        nombres.add(message.getString("nombre_remitente"));
+                        adapter.add(message.getString("nombre_remitente") + Html.fromHtml("<br />") + message.getString("mensaje"));
 
+                    }
 
-                    nombres.add(message.getString("nombre_remitente"));
-                    adapter.add(message.getString("nombre_remitente")+ Html.fromHtml("<br />")+message.getString("mensaje"));
-                   /* NotificationCompat.Builder mBuilder =
-                            new NotificationCompat.Builder(getActivity())
-                                    .setSmallIcon(android.R.drawable.btn_star)
-                                    .setLargeIcon((((BitmapDrawable)getResources()
-                                            .getDrawable(R.drawable.simbolo_infinito)).getBitmap()))
-                                    .setContentTitle("Wayta")
-                                    .setContentText("\"nombre_remitente\")+ Html.fromHtml(\"<br />\")+message.getString(\"mensaje\")")
-                                    .setContentInfo("Tiene un mensaje nuevo");
-                    Intent notIntent =
-                            new Intent(getActivity(), InboxFragment.class);
-                    PendingIntent contIntent =
-                            PendingIntent.getActivity(
-                                   getActivity(), 0, notIntent, 0);
-                    mBuilder.setContentIntent(contIntent);*/
 
                 }
+
 
                 spinner.setVisibility(View.INVISIBLE);
 
             }
         });
+
+
     }
 
 
@@ -110,8 +99,9 @@ public class InboxFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra("id_destinatario",mMessages.get(position).getObjectId());
-        intent.putExtra("nombre_remitente",nombres.get(position).toString());
+        intent.putExtra("nombre_remitente", nombres.get(position).toString());
         startActivity(intent);
+
 
 
     }

@@ -49,17 +49,18 @@ public class ChatFragment extends ListFragment{
         setListAdapter(adapter);
         Bundle arguments=getArguments();
         nombre_remitente=arguments.getString("nombre_remitente");
-        final ContactDataSource dataSource=new ContactDataSource(getActivity());
+        /*final ContactDataSource dataSource=new ContactDataSource(getActivity());
 
         men=dataSource.readMessages(nombre_remitente);
 
         for(int i=0;i<men.size();i++){
 
             adapter.add(men.get(i).toString());
-        }
+        }*/
 
         return rootView;
     }
+
 
     @Override
     public void onResume() {
@@ -75,12 +76,22 @@ public class ChatFragment extends ListFragment{
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 mMessages = parseObjects;
-                for (ParseObject message : mMessages) {
-                    if(message.get("nombre_remitente").equals(nombre_remitente)){
-                        dataSource.addMessages(nombre_remitente, message.getString("mensaje").toString(), "12/11/2012");
-                        message.deleteInBackground();
+                if(e==null){
+                    for (ParseObject message : mMessages) {
+                        if(message.get("nombre_remitente").equals(nombre_remitente)){
+                            dataSource.addMessages(nombre_remitente, message.getString("mensaje").toString(), "12/11/2012");
+                            message.deleteInBackground();
+                        }
+
+
                     }
 
+                    men=dataSource.readMessages(nombre_remitente);
+
+                    for(int i=0;i<men.size();i++){
+
+                        adapter.add(men.get(i).toString());
+                    }
 
                 }
 

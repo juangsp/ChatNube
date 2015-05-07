@@ -43,7 +43,7 @@ public class ChatActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         texto=(EditText)findViewById(R.id.editText2);
-        cuadro=(TextView)findViewById(R.id.textView7);
+        //cuadro=(TextView)findViewById(R.id.textView7);
         Bundle extras = getIntent().getExtras();
         ID_DESTINATARIO = extras.getString("id_destinatario");
         nombre_remitente=extras.getString("nombre_remitente");
