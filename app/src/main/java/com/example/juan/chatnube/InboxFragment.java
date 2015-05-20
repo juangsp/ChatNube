@@ -32,11 +32,9 @@ public class InboxFragment extends ListFragment {
     ProgressBar spinner;
     List<ParseObject> mMessages;
     ArrayList<String> messages;
-    ArrayList<String> mensajes=new ArrayList();
     ArrayList<String> nombres=new ArrayList();
     ArrayAdapter adapter;
-    String nombre="";
-    String mensaje="";
+
 
 
 
@@ -49,8 +47,7 @@ public class InboxFragment extends ListFragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_main_activity2, container, false);
-        spinner=(ProgressBar)rootView.findViewById(R.id.progressBar);
-        spinner.setVisibility(View.GONE);
+
 
         return rootView;
     }
@@ -63,31 +60,43 @@ public class InboxFragment extends ListFragment {
 
         adapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,messages);
         setListAdapter(adapter);
+        if(ParseUser.getCurrentUser()!=null) {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("message");
+            query.whereEqualTo("id_destinatario", ParseUser.getCurrentUser().getObjectId());
+            query.addDescendingOrder("createdAt");
 
-        ParseQuery<ParseObject> query=ParseQuery.getQuery("message");
-        query.whereEqualTo("id_destinatario", ParseUser.getCurrentUser().getObjectId());
-        query.addDescendingOrder("createdAt");
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> parseObjects, ParseException e) {
+                    mMessages = parseObjects;
 
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                mMessages = parseObjects;
+                    if (e == null) {
+                        for (ParseObject message : mMessages) {
+                            nombres.add(message.getString("nombre_remitente"));
+                            //adapter.add(message.getString("nombre_remitente") + Html.fromHtml("<br />") + message.getString("mensaje"));
 
-                if (e == null) {
-                    for (ParseObject message : mMessages) {
-                        nombres.add(message.getString("nombre_remitente"));
-                        adapter.add(message.getString("nombre_remitente") + Html.fromHtml("<br />") + message.getString("mensaje"));
+                        }
+
+                        for (int i = 0; i < nombres.size(); i++) {
+                            int contador = 1;
+                            String nombre = nombres.get(i).toString();
+                            for (int j = i + 1; j < nombres.size(); j++) {
+                                if (nombre.equals(nombres.get(j).toString())) {
+                                    contador++;
+                                    nombres.remove(j);
+
+                                }
+                            }
+                            adapter.add(nombre + Html.fromHtml("<br />") + "Tienes" + contador + "mensajes nuevos");
+                        }
+
 
                     }
 
 
                 }
-
-
-                spinner.setVisibility(View.INVISIBLE);
-
-            }
-        });
+            });
+        }
 
 
     }
@@ -97,6 +106,7 @@ public class InboxFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        adapter.remove(l.getAdapter().getItem(position));
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra("id_destinatario",mMessages.get(position).getObjectId());
         intent.putExtra("nombre_remitente", nombres.get(position).toString());

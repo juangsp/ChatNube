@@ -8,7 +8,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.renderscript.RenderScript;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -29,6 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -51,6 +56,9 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
     ViewPager mViewPager;
     static String s= Context.NOTIFICATION_SERVICE;
     NotificationManager mNotificationManager;
+    Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+    long[] pattern = new long[]{1000,500,1000};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,7 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
+
             final ActionBar actionBar = getSupportActionBar();
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -78,10 +87,7 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
 
             // For each of the sections in the app, add a tab to the action bar.
             for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-                // Create a tab with text corresponding to the page title defined by
-                // the adapter. Also specify this Activity object, which implements
-                // the TabListener interface, as the callback (listener) for when
-                // this tab is selected.
+
                 actionBar.addTab(
                         actionBar.newTab()
                                 .setText(mSectionsPagerAdapter.getPageTitle(i))
@@ -120,8 +126,8 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
             ParseUser currentUser = ParseUser.getCurrentUser();
 
             Intent i=new Intent(this,LoginActivity.class);
-            i.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
+           // i.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+           // i.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
 
 
@@ -129,9 +135,9 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
         }
 
         if(id==R.id.action_find){
-            Intent i=new Intent(this,EditFriendsActivity.class);
-            i.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent i=new Intent(getApplicationContext(),EditFriendsActivity.class);
+           // i.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+            //i.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
 
         }
@@ -142,41 +148,59 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
     @Override
    protected void onResume() {
         super.onResume();
+        if (ParseUser.getCurrentUser() != null) {
+
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("message");
+            query.whereEqualTo("id_destinatario", ParseUser.getCurrentUser().getObjectId());
+            query.addDescendingOrder("createdAt");
+
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> parseObjects, ParseException e) {
+                    final int mensajes;
+
+                    if (e == null && parseObjects.size() > 0) {
+                        mensajes = parseObjects.size();
+                        NotificationCompat.Builder mBuilder =
+                                new NotificationCompat.Builder(MainActivity2.this)
+                                        .setSmallIcon(R.drawable.simbolo_infinito)
+                                        .setLargeIcon((((BitmapDrawable) getResources()
+                                                .getDrawable(R.drawable.simbolo_infinito)).getBitmap()))
+                                        .setContentTitle("Wayta")
+                                        .setContentInfo("Tienes " + mensajes + " mensaje(s) nuevo(s)")
+                                        .setSound(defaultSound)
+                                        .setVibrate(pattern)
+                                        .setLights(Color.BLUE, 1, 0)
+                                        .setAutoCancel(true);
 
 
-        ParseQuery<ParseObject> query=ParseQuery.getQuery("message");
-        query.whereEqualTo("id_destinatario", ParseUser.getCurrentUser().getObjectId());
-        query.addDescendingOrder("createdAt");
+                        Intent notIntent =
+                                new Intent(MainActivity2.this, MainActivity2.class);
+                        PendingIntent contIntent =
+                                PendingIntent.getActivity(
+                                        MainActivity2.this, 0, notIntent, 0);
+                        mBuilder.setContentIntent(contIntent);
+                        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager.notify(1, mBuilder.build());
 
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                final int mensajes;
-
-                if (e == null&& parseObjects.size()>1) {
-                   mensajes= parseObjects.size();
-                    NotificationCompat.Builder mBuilder =
-                            new NotificationCompat.Builder(MainActivity2.this)
-                                    .setSmallIcon(android.R.drawable.btn_star)
-                                    .setLargeIcon((((BitmapDrawable) getResources()
-                                            .getDrawable(R.drawable.simbolo_infinito)).getBitmap()))
-                                    .setContentTitle("Wayta")
-                                    .setContentInfo("Tiene "+mensajes+" mensaje(s) nuevo(s)");
-                    Intent notIntent =
-                            new Intent(MainActivity2.this, MainActivity2.class);
-                    PendingIntent contIntent =
-                            PendingIntent.getActivity(
-                                   MainActivity2.this, 0, notIntent, 0);
-                    mBuilder.setContentIntent(contIntent);
-                     mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    mNotificationManager.notify(1, mBuilder.build());
+                    }
                 }
-            }
-        });
+            });
 
 
+        }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        String s2= Context.NOTIFICATION_SERVICE;
+        if(ParseUser.getCurrentUser()!=null) {
+            Notificaciones s = new Notificaciones(this, s2);
+            s.run();
+        }
+
+    }
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {

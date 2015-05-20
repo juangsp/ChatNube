@@ -38,9 +38,6 @@ public class LoginActivity extends Activity {
         enviar=(Button)findViewById(R.id.singUpButton);
         registro=(TextView)findViewById(R.id.registrotextView);
 
-
-
-
     }
 
     public void enviar(View v){

@@ -98,21 +98,31 @@ public class EditFriendsActivity extends ActionBarActivity {
         friendRelation.add(friend);
         ContactDataSource dataSource=new ContactDataSource(this.getApplicationContext());
         dataSource.addContact( nombre.getText().toString());
-        dataSource.createTables( nombre.getText().toString());
+        dataSource.createTables(nombre.getText().toString());
+
 
         mCurrentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
 
-                if(e==null){
+                if (e == null) {
                     Toast.makeText(EditFriendsActivity.this, "Ahora es tu amigo", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Toast.makeText(EditFriendsActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
 
+
+    }
+
+    public ParseObject createPetition(){
+        ParseObject message =new ParseObject("friend_petition");
+        message.put("id_destinatario",friend.getObjectId());
+        message.put("nombre_remitente", ParseUser.getCurrentUser().getUsername());
+
+        return message;
 
     }
 }

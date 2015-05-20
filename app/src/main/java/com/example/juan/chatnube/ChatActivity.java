@@ -1,10 +1,9 @@
 package com.example.juan.chatnube;
 
-import android.app.Activity;
+
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,17 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ChatActivity extends Activity {
+public class ChatActivity extends FragmentActivity {
     ParseUser mCurrentUser;
     List<ParseObject> mMessages;
     public String ID_REMITENTE="";
@@ -39,11 +36,13 @@ public class ChatActivity extends Activity {
     TextView cuadro;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+
         texto=(EditText)findViewById(R.id.editText2);
-        //cuadro=(TextView)findViewById(R.id.textView7);
+
         Bundle extras = getIntent().getExtras();
         ID_DESTINATARIO = extras.getString("id_destinatario");
         nombre_remitente=extras.getString("nombre_remitente");
@@ -64,6 +63,7 @@ public class ChatActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_chat, menu);
+
         return true;
     }
 

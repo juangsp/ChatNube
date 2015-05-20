@@ -6,4 +6,9 @@
     android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_find" android:title="@string/action_find"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_add" android:title="@string/action_add_person"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_add_person"
+        app:showAsAction="always" />
+
 </menu>

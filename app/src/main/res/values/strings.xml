@@ -5,7 +5,9 @@
     <string name="action_logout">Logout</string>
     <string name="action_find">Buscar Amigos</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="username_hint">Usuario</string>
+    <string name="username_hint">Nombre</string>
+    <string name="firstname_hint">Apellido</string>
+    <string name="years_hint">Edad</string>
     <string name="password_hint">Contraseña</string>
     <string name="ingresar">Entrar</string>
     <string name="sing_up_text">¡Registrate!</string>
@@ -23,5 +25,6 @@
     <string name="title_activity_edit_friends">EditFriendsActivity</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_chat_activity2">ChatActivity2</string>
+    <string name="action_add_person">add_person</string>
 
-    </resources>
+</resources>

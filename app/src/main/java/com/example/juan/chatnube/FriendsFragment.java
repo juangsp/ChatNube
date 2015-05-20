@@ -56,35 +56,36 @@ public class FriendsFragment extends ListFragment {
             super.onResume();
 
 
-            usernames=new ArrayList();
-            adapter=new ArrayAdapter<String>(this.getActivity(), simple_list_item_1,usernames);
+            usernames = new ArrayList();
+            adapter = new ArrayAdapter<String>(this.getActivity(), simple_list_item_1, usernames);
             setListAdapter(adapter);
+            if (ParseUser.getCurrentUser() != null) {
+                ParseQuery query = ParseUser.getQuery();
+                mCurrentUser = ParseUser.getCurrentUser();
+                friendRelation = mCurrentUser.getRelation("friendsRelation");
+                query = friendRelation.getQuery();
 
-            ParseQuery query = ParseUser.getQuery();
-            mCurrentUser=ParseUser.getCurrentUser();
-            friendRelation=mCurrentUser.getRelation("friendsRelation");
-            query= friendRelation.getQuery();
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    @Override
+                    public void done(List<ParseUser> list, ParseException e) {
 
-            query.findInBackground(new FindCallback<ParseUser>() {
-                @Override
-                public void done(List<ParseUser> list, ParseException e) {
+                        if (e == null) {
+                            mUser = list;
 
-                    if (e == null) {
-                        mUser = list;
+                            for (ParseUser user : mUser) {
+                                nombres.add(user.getUsername().toString());
+                                adapter.add(user.getUsername());
+                            }
 
-                        for (ParseUser user : mUser) {
-                            nombres.add(user.getUsername().toString());
-                            adapter.add(user.getUsername());
+                        } else {
+
                         }
-
-                    } else {
 
                     }
 
-                }
 
-
-            });
+                });
+            }
         }
 
     @Override

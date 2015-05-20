@@ -24,9 +24,14 @@ public class SingUp_activity extends Activity {
     private EditText nombre;
     private EditText contrasena;
     private EditText email;
+    private EditText apellido;
+    private EditText edad;
+
     private String nom;
     private String password;
     private String mail;
+    private String ape;
+    private String ed;
 
 
 
@@ -37,7 +42,11 @@ public class SingUp_activity extends Activity {
         nombre=(EditText)findViewById(R.id.username2Field);
         contrasena=(EditText)findViewById(R.id.password2Field);
         email=(EditText)findViewById(R.id.emailField);
+        apellido=(EditText)findViewById(R.id.editText3);
+        edad=(EditText)findViewById(R.id.editText4);
         enviar=(Button)findViewById(R.id.singUpButton);
+
+
 
 
     }
@@ -51,6 +60,10 @@ public class SingUp_activity extends Activity {
         password=password.trim();
         mail=email.getText().toString();
         mail=mail.trim();
+        ape=apellido.getText().toString();
+        ape=ape.trim();
+        ed=edad.getText().toString();
+        ed=ed.trim();
         //String message=String.format(getString(R.string.empty_field_message));
         String title=String.format(getString(R.string.title));
 
@@ -69,6 +82,8 @@ public class SingUp_activity extends Activity {
             user.setUsername(nom);
             user.setPassword(password);
             user.setEmail(mail);
+            user.put("apellido", ape);
+            user.put("edad",ed);
 
             user.signUpInBackground(new SignUpCallback() {
                 @Override
