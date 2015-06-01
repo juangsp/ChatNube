@@ -1,4 +1,4 @@
-package com.example.juan.chatnube;
+package com.example.juan.chatnube.DataBase;
 
 
 import android.content.Context;
@@ -20,10 +20,7 @@ public class ContactSQLiteHelper extends SQLiteOpenHelper {
     static final String COLUMN_MENSAJE="mensaje";
     static final String COLUMN_FECHA="fecha";
 
-    String CREATE_TABLE_CONVERSATION="CREATE TABLE "+message_table+" ( "+
-            COLUMN_USUARIO+" TEXT NOT NULL, "+
-            COLUMN_MENSAJE+" TEXT NOT NULL,"+
-            COLUMN_FECHA+ " TEXT NOT NULL);";
+
 
     static final String CREATE_TABLE_CONTACTS="CREATE TABLE "+CONTACT_TABLE+" ( "+
             COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,  "+
@@ -40,13 +37,19 @@ public class ContactSQLiteHelper extends SQLiteOpenHelper {
     public void createTable(SQLiteDatabase db,String usuario) {
         message_table = usuario;
         Log.i("nombre",usuario);
-        db.execSQL("CREATE TABLE "+usuario+"("+
-                COLUMN_USUARIO+" TEXT NOT NULL, "+
-                COLUMN_MENSAJE+" TEXT NOT NULL,"+
-                COLUMN_FECHA+ " TEXT NOT NULL);"
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + usuario + "(" +
+                        COLUMN_USUARIO + " TEXT NOT NULL, " +
+                        COLUMN_MENSAJE + " TEXT NOT NULL," +
+                        COLUMN_FECHA + " TEXT NOT NULL);"
         );
 
     }
+
+    public void dropTable(SQLiteDatabase db,String usuario){
+        db.execSQL("DROP TABLE IF EXISTS "+usuario+";");
+    }
+
+
 
 
 

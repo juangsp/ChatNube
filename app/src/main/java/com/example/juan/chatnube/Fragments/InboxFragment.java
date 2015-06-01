@@ -1,15 +1,10 @@
-package com.example.juan.chatnube;
+package com.example.juan.chatnube.Fragments;
 
 
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-;import com.parse.FindCallback;
+;import com.example.juan.chatnube.Main.ChatActivity;
+import com.example.juan.chatnube.R;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -106,7 +103,8 @@ public class InboxFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        adapter.remove(l.getAdapter().getItem(position));
+        adapter.remove(messages.get(position));
+
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra("id_destinatario",mMessages.get(position).getObjectId());
         intent.putExtra("nombre_remitente", nombres.get(position).toString());

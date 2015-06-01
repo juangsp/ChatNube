@@ -1,4 +1,4 @@
-package com.example.juan.chatnube;
+package com.example.juan.chatnube.DataBase;
 
 
 import android.content.ContentValues;
@@ -52,7 +52,7 @@ public class ContactDataSource {
     }
 
 
-    public void addMessages(String usuario,String mensaje,String fecha){
+    public void addMessages(String tabla,String mensaje,String fecha,String usuario){
         SQLiteDatabase database=openWriteable();
         database.beginTransaction();
         ContentValues contactValues=new ContentValues();
@@ -62,7 +62,7 @@ public class ContactDataSource {
         contactValues.put(ContactSQLiteHelper.COLUMN_FECHA, fecha);
 
         long memeID;
-        memeID=database.insert(usuario,null,contactValues);
+        memeID=database.insert(tabla,null,contactValues);
 
         database.setTransactionSuccessful();
         database.endTransaction();
@@ -70,43 +70,12 @@ public class ContactDataSource {
     }
 
 
-    public ArrayList<String> readContact(){
-        SQLiteDatabase database=openReadable();
-        ArrayList<String>contacs=new ArrayList();
-        Cursor cursor;
-        cursor=database.query(ContactSQLiteHelper.CONTACT_TABLE,
-                new String[]{ContactSQLiteHelper.COLUMN_USUARIO},
-                null,
-                null,
-                null,
-                null,
-                null);
-
-        if(cursor.moveToFirst()==true){
-
-            do{
-
-                String name=getStringFromColumnName(cursor,ContactSQLiteHelper.COLUMN_USUARIO);
-
-
-                contacs.add(name);
-            }while(cursor.moveToNext()!=false);
-        }
-        cursor.close();
-        close(database);
-
-        return contacs;
-    }
-
 
     public ArrayList<String> readMessages(String tabla) {
         SQLiteDatabase database = openReadable();
         ArrayList<String> mensajes=new ArrayList();
 
         Cursor cursor;
-        /*cursor = database.rawQuery("SELECT "+ContactSQLiteHelper.COLUMN_MENSAJE+"  FROM " + tabla + "\n" +
-                "WHERE " + ContactSQLiteHelper.COLUMN_USUARIO + "=" +usuario+
-                "ORDER BY "+ContactSQLiteHelper.COLUMN_FECHA,null);*/
         cursor = database.rawQuery("SELECT "+ContactSQLiteHelper.COLUMN_MENSAJE+"  FROM " + tabla ,null);
 
         if (cursor.moveToFirst() == true) {
@@ -126,15 +95,54 @@ public class ContactDataSource {
         return mensajes;
     }
 
+
+    public ArrayList<String> readUser(String tabla) {
+        SQLiteDatabase database = openReadable();
+        ArrayList<String> mensajes=new ArrayList();
+
+        Cursor cursor;
+        /*cursor = database.rawQuery("SELECT "+ContactSQLiteHelper.COLUMN_MENSAJE+"  FROM " + tabla + "\n" +
+                "WHERE " + ContactSQLiteHelper.COLUMN_USUARIO + "=" +usuario+
+                "ORDER BY "+ContactSQLiteHelper.COLUMN_FECHA,null);*/
+        cursor = database.rawQuery("SELECT "+ContactSQLiteHelper.COLUMN_USUARIO+"  FROM " + tabla ,null);
+
+        if (cursor.moveToFirst() == true) {
+
+            do {
+
+                String message = getStringFromColumnName(cursor, ContactSQLiteHelper.COLUMN_USUARIO);
+                mensajes.add(message);
+
+            } while (cursor.moveToNext() != false);
+            cursor.close();
+            close(database);
+
+
+
+        }
+        return mensajes;
+    }
+
     public void deleteContact(String name){
         SQLiteDatabase database=openWriteable();
         database.beginTransaction();
-        database.delete(ContactSQLiteHelper.CONTACT_TABLE,String.format("%s=%d", ContactSQLiteHelper.COLUMN_USUARIO, name),null);
+        database.delete(ContactSQLiteHelper.CONTACT_TABLE,ContactSQLiteHelper.COLUMN_USUARIO+"="+name,null);
+                database.setTransactionSuccessful();
+        database.endTransaction();
+        close(database);
+
+    }
+
+    public void deleteConversation(String name){
+        SQLiteDatabase database=openReadable();
+        database.beginTransaction();
+        contactSQLiteHelper.dropTable(database,name);
         database.setTransactionSuccessful();
         database.endTransaction();
         close(database);
 
     }
+
 
 
     public SQLiteDatabase openWriteable() {

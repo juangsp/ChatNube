@@ -1,4 +1,4 @@
-package com.example.juan.chatnube;
+package com.example.juan.chatnube.Notifications;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -14,6 +13,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 
+import com.example.juan.chatnube.Main.MainActivity2;
+import com.example.juan.chatnube.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -55,7 +56,7 @@ public class Notificaciones extends Service implements Runnable{
     @Override
     public void run() {
 
-        //while (numero < 5) {
+        while (numero < 5) {
             if (ParseUser.getCurrentUser() != null) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("message");
                 query.whereEqualTo("id_destinatario", ParseUser.getCurrentUser().getObjectId());
@@ -85,7 +86,7 @@ public class Notificaciones extends Service implements Runnable{
                 numero++;
             }
         }
-    //}
+    }
 
 
     public  Handler handler = new Handler() {

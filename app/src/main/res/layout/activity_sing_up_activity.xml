@@ -4,7 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.juan.chatnube.SingUp_activity">
+    tools:context="com.example.juan.chatnube.LogIn.SingUp_activity">
 
     <EditText
         android:layout_width="match_parent"

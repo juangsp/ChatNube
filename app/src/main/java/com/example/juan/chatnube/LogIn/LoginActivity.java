@@ -1,9 +1,8 @@
-package com.example.juan.chatnube;
+package com.example.juan.chatnube.LogIn;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,12 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.juan.chatnube.Main.MainActivity2;
+import com.example.juan.chatnube.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 
 public class LoginActivity extends Activity {

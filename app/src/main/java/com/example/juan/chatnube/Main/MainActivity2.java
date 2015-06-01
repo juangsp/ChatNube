@@ -1,9 +1,7 @@
-package com.example.juan.chatnube;
+package com.example.juan.chatnube.Main;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.renderscript.RenderScript;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -22,18 +19,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.text.Html;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.juan.chatnube.Fragments.FriendsFragment;
+import com.example.juan.chatnube.Fragments.InboxFragment;
+import com.example.juan.chatnube.LogIn.LoginActivity;
+import com.example.juan.chatnube.Menu.DeleteFriendsActivity;
+import com.example.juan.chatnube.Menu.EditFriendsActivity;
+import com.example.juan.chatnube.Menu.PetitionsActivity;
+import com.example.juan.chatnube.Notifications.Notificaciones;
+import com.example.juan.chatnube.R;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -58,12 +56,16 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
     NotificationManager mNotificationManager;
     Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     long[] pattern = new long[]{1000,500,1000};
+    MenuItem mItem;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activity2);
+        mItem=(MenuItem)findViewById(R.id.action_add);
+
 
 
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -136,10 +138,16 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
 
         if(id==R.id.action_find){
             Intent i=new Intent(getApplicationContext(),EditFriendsActivity.class);
-           // i.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
-            //i.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
 
+        }
+        if(id==R.id.action_delete){
+            Intent i=new Intent(getApplicationContext(),DeleteFriendsActivity.class);
+            startActivity(i);
+        }
+        if(id==R.id.action_add){
+            Intent i=new Intent(getApplicationContext(),PetitionsActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -184,6 +192,22 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
                         mNotificationManager.notify(1, mBuilder.build());
 
                     }
+                }
+            });
+
+
+            ParseQuery<ParseObject> petition = ParseQuery.getQuery("friend_petition");
+            petition.whereEqualTo("id_destinatario", ParseUser.getCurrentUser().getObjectId());
+            petition.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if(e==null&&list.size()>0){
+                       // mItem.setVisible(true);
+                        Toast.makeText(MainActivity2.this, "Tienes nuevas peticiones de amistad ", Toast.LENGTH_LONG).show();
+
+
+                    }
+
                 }
             });
 
