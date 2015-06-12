@@ -25,6 +25,7 @@ public class LoginActivity extends Activity {
     private EditText contrasena;
     private String nom;
     private String password;
+    private int contador=0;
 
 
 
@@ -56,7 +57,7 @@ public class LoginActivity extends Activity {
                     Intent intent=new Intent(LoginActivity.this,MainActivity2.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    startActivityForResult(intent, 1234);
                 } else {
                     AlertDialog.Builder builder=new AlertDialog.Builder(LoginActivity.this);
                     builder.setMessage( "Ese usuario no existe");
@@ -99,6 +100,23 @@ public class LoginActivity extends Activity {
         startActivity(in);
         registro.setVisibility(View.INVISIBLE);
 
+
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode ==1234 && resultCode==RESULT_OK){
+
+            int res = data.getExtras().getInt("contador");
+            contador=res;
+
+          if(contador==1){
+              registro.setVisibility(View.INVISIBLE);
+          }
+
+
+        }
 
     }
 }

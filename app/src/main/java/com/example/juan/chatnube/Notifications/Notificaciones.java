@@ -34,6 +34,7 @@ public class Notificaciones extends Service implements Runnable{
     int numero=0;
     int mensajes=0;
     Context context;
+    int contador=0;
     private final int MSG_NUEVO = 1;
 
     public Notificaciones() {
@@ -102,28 +103,29 @@ public class Notificaciones extends Service implements Runnable{
 
     public  void Notificar() {
 
-        mNotificationManager = (NotificationManager)context.getSystemService(s) ;
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.simbolo_infinito)
-                .setContentTitle("Wayta")
-                .setContentInfo("Tienes " + mensajes + " mensaje(s) nuevo(s)")
-                .setSound(defaultSound)
-                .setVibrate(pattern)
-                .setLights(Color.BLUE, 1, 0)
-                .setAutoCancel(true);
+            mNotificationManager = (NotificationManager) context.getSystemService(s);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.simbolo_infinito)
+                    .setContentTitle("Wayta")
+                    .setContentInfo("Tienes " + mensajes + " mensaje(s) nuevo(s)")
+                    .setSound(defaultSound)
+                    .setVibrate(pattern)
+                    .setLights(Color.BLUE, 1, 0)
+                    .setAutoCancel(true);
 
 
-        Intent notIntent =
-                new Intent(context, MainActivity2.class);
-        PendingIntent contIntent =
-                PendingIntent.getActivity(
-                        context, 0, notIntent, 0);
-        mBuilder.setContentIntent(contIntent);
+            Intent notIntent =
+                    new Intent(context, MainActivity2.class);
+            PendingIntent contIntent =
+                    PendingIntent.getActivity(
+                            context, 0, notIntent, 0);
+            mBuilder.setContentIntent(contIntent);
 
-        mNotificationManager.notify(1, mBuilder.build());
+            mNotificationManager.notify(1, mBuilder.build());
+        }
 
 
-    }
+
 
 
 

@@ -66,12 +66,18 @@ public class SingUp_activity extends Activity {
         ed=edad.getText().toString();
         ed=ed.trim();
         //String message=String.format(getString(R.string.empty_field_message));
+        if(ed.isEmpty()){
+            ed="";
+        }
+        if(ape.isEmpty()){
+            ape="";
+        }
         String title=String.format(getString(R.string.title));
 
-        if(nom.isEmpty()){
-            Toast.makeText(this,"Te falta por añadir el nombre",Toast.LENGTH_SHORT).show();
+        if(nom.isEmpty()||password.isEmpty()||mail.isEmpty()){
+            Toast.makeText(this,"Debes rellenar los campos obligatorios",Toast.LENGTH_SHORT).show();
             AlertDialog.Builder builder=new AlertDialog.Builder(this);
-            builder.setMessage( "Es obligatorio un nombre");
+            builder.setMessage( "Es obligatorio un nombre, una contraseña y un email");
             builder.setTitle(title);
             builder.setPositiveButton(android.R.string.ok,null);
             builder.setIcon(android.R.drawable.ic_dialog_alert);

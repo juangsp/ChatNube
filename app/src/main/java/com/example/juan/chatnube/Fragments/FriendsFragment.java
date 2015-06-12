@@ -73,7 +73,7 @@ public class FriendsFragment extends ListFragment {
 
                             for (ParseUser user : mUser) {
                                 nombres.add(user.getUsername().toString());
-                                adapter.add(user.getUsername());
+                                adapter.add(user.getUsername()+" "+user.get("apellido"));
                             }
 
                         } else {

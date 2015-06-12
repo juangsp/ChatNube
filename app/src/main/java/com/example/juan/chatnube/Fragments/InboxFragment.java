@@ -28,8 +28,9 @@ import java.util.List;
 public class InboxFragment extends ListFragment {
     ProgressBar spinner;
     List<ParseObject> mMessages;
-    ArrayList<String> messages;
+    ArrayList<String> messages=new ArrayList();
     ArrayList<String> nombres=new ArrayList();
+    ArrayList<String> nom=new ArrayList();
     ArrayAdapter adapter;
 
 
@@ -53,7 +54,7 @@ public class InboxFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        messages=new ArrayList();
+        //messages=new ArrayList();
 
         adapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,messages);
         setListAdapter(adapter);
@@ -84,6 +85,7 @@ public class InboxFragment extends ListFragment {
 
                                 }
                             }
+                            nom.add(nombre);
                             adapter.add(nombre + Html.fromHtml("<br />") + "Tienes" + contador + "mensajes nuevos");
                         }
 
@@ -103,12 +105,19 @@ public class InboxFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+
         adapter.remove(messages.get(position));
 
+
+        adapter.notifyDataSetChanged();
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra("id_destinatario",mMessages.get(position).getObjectId());
         intent.putExtra("nombre_remitente", nombres.get(position).toString());
         startActivity(intent);
+
+
+
+
 
 
 

@@ -82,7 +82,7 @@ public class DeleteFriendsActivity extends ListActivity {
 
                         for (ParseUser user : mUser) {
                             friends.add(user);
-                            adapter.add(user.getUsername());
+                            adapter.add(user.getUsername()+" "+user.get("apellido"));
                         }
 
                     }
@@ -99,6 +99,7 @@ public class DeleteFriendsActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, final int position, long id) {
         super.onListItemClick(l, v, position, id);
         eliminarContacto(friends.get(position));
+        adapter.remove(friends.get(position));
 
 
 
@@ -113,7 +114,6 @@ public class DeleteFriendsActivity extends ListActivity {
             ContactDataSource dataSource = new ContactDataSource(this);
             //dataSource.deleteContact(user.getUsername().toString());
             dataSource.deleteConversation(user.getUsername().toString());
-
 
             mCurrentUser.saveInBackground();
 

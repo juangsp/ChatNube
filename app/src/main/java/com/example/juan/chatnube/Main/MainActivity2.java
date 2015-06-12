@@ -128,9 +128,11 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
             ParseUser currentUser = ParseUser.getCurrentUser();
 
             Intent i=new Intent(this,LoginActivity.class);
-           // i.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
-           // i.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+            //i.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+            //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            i.putExtra("contador", 1);
+            setResult(RESULT_OK, i);
+            finish();
 
 
             return true;
@@ -169,7 +171,7 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
 
                     if (e == null && parseObjects.size() > 0) {
                         mensajes = parseObjects.size();
-                        NotificationCompat.Builder mBuilder =
+                       /* NotificationCompat.Builder mBuilder =
                                 new NotificationCompat.Builder(MainActivity2.this)
                                         .setSmallIcon(R.drawable.simbolo_infinito)
                                         .setLargeIcon((((BitmapDrawable) getResources()
@@ -189,7 +191,9 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
                                         MainActivity2.this, 0, notIntent, 0);
                         mBuilder.setContentIntent(contIntent);
                         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                        mNotificationManager.notify(1, mBuilder.build());
+                        mNotificationManager.notify(1, mBuilder.build());*/
+
+                        Toast.makeText(MainActivity2.this, "Tienes "+mensajes+"mensajes nuevos", Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -201,8 +205,8 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
             petition.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> list, ParseException e) {
-                    if(e==null&&list.size()>0){
-                       // mItem.setVisible(true);
+                    if (e == null && list.size() > 0) {
+
                         Toast.makeText(MainActivity2.this, "Tienes nuevas peticiones de amistad ", Toast.LENGTH_LONG).show();
 
 
@@ -218,13 +222,15 @@ public class MainActivity2 extends ActionBarActivity implements ActionBar.TabLis
     @Override
     protected void onStop() {
         super.onStop();
+
         String s2= Context.NOTIFICATION_SERVICE;
         if(ParseUser.getCurrentUser()!=null) {
             Notificaciones s = new Notificaciones(this, s2);
             s.run();
         }
-
     }
+
+
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {

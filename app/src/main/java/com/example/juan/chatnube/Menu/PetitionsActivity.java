@@ -86,7 +86,7 @@ public class PetitionsActivity extends ListActivity {
                     for (ParseObject petition : mPeticiones) {
                         petitions.add(petition);
                         friends.add(petition.get("nombre_remitente").toString());
-                        adapter.add(petition.get("nombre_remitente") + " te ha enviado una peticion para que le agregues");
+                        adapter.add(petition.get("nombre_remitente") +" "+petition.get("apellido")+ " te ha enviado una peticion para que le agregues");
                     }
 
 

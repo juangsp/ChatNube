@@ -156,6 +156,7 @@ public class EditFriendsActivity extends ActionBarActivity {
         petition.put("id_destinatario", friend.getObjectId());
         petition.put("id_remitente", ParseUser.getCurrentUser().getObjectId());
         petition.put("nombre_remitente", ParseUser.getCurrentUser().getUsername());
+        petition.put("apellido", ParseUser.getCurrentUser().get("apellido"));
 
         return petition;
 
