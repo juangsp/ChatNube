@@ -100,8 +100,7 @@ public class DeleteFriendsActivity extends ListActivity {
         super.onListItemClick(l, v, position, id);
         eliminarContacto(friends.get(position));
         adapter.remove(friends.get(position));
-
-
+        adapter.notifyDataSetChanged();
 
 
     }

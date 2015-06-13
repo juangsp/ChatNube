@@ -25,12 +25,13 @@ import java.util.List;
 /**
  * Created by Juan on 17/04/2015.
  */
-public class InboxFragment extends ListFragment {
+public class InboxFragment extends ListFragment  {
     ProgressBar spinner;
     List<ParseObject> mMessages;
     ArrayList<String> messages=new ArrayList();
     ArrayList<String> nombres=new ArrayList();
     ArrayList<String> nom=new ArrayList();
+    ArrayList<Integer> cont=new ArrayList();
     ArrayAdapter adapter;
 
 
@@ -68,14 +69,14 @@ public class InboxFragment extends ListFragment {
                 public void done(List<ParseObject> parseObjects, ParseException e) {
                     mMessages = parseObjects;
 
-                    if (e == null) {
+                    if (parseObjects.size()>0) {
                         for (ParseObject message : mMessages) {
                             nombres.add(message.getString("nombre_remitente"));
-                            //adapter.add(message.getString("nombre_remitente") + Html.fromHtml("<br />") + message.getString("mensaje"));
+                           // adapter.add(message.getString("nombre_remitente") + Html.fromHtml("<br />") + message.getString("mensaje"));
 
                         }
 
-                        for (int i = 0; i < nombres.size(); i++) {
+                           for (int i = 0; i < nombres.size(); i++) {
                             int contador = 1;
                             String nombre = nombres.get(i).toString();
                             for (int j = i + 1; j < nombres.size(); j++) {
@@ -86,12 +87,15 @@ public class InboxFragment extends ListFragment {
                                 }
                             }
                             nom.add(nombre);
-                            adapter.add(nombre + Html.fromHtml("<br />") + "Tienes" + contador + "mensajes nuevos");
+                            cont.add(contador);
+                            //adapter.add(nombre + Html.fromHtml("<br />") + "Tienes" + contador + "mensajes nuevos");
+
                         }
+                        for(int i=0;i<nom.size();i++){
 
-
+                            adapter.add(nom.get(i).toString() + Html.fromHtml("<br />") + "Tienes" + cont.get(i).intValue() + "mensajes nuevos");
+                        }
                     }
-
 
                 }
             });
@@ -100,16 +104,13 @@ public class InboxFragment extends ListFragment {
 
     }
 
-
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
         adapter.remove(messages.get(position));
-
-
         adapter.notifyDataSetChanged();
+
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra("id_destinatario",mMessages.get(position).getObjectId());
         intent.putExtra("nombre_remitente", nombres.get(position).toString());

@@ -112,14 +112,15 @@ public class PetitionsActivity extends ListActivity {
                     mList = list;
 
                     agregarContacto(mList);
-                   petitions.get(position).deleteInBackground();
+                    petitions.get(position).deleteInBackground();
                 }
 
             }
         });
 
 
-
+        adapter.remove(peticiones.get(position));
+        adapter.notifyDataSetChanged();
     }
     public  void agregarContacto(List<ParseUser>list) {
         for (ParseUser user : list) {

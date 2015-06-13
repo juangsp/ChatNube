@@ -89,7 +89,7 @@ public class EditFriendsActivity extends ActionBarActivity {
             @Override
             public void done(List<ParseUser> list, ParseException e) {
 
-                if(e==null){
+                if(list.size()>0){
                     mList=list;
                     nombre.setVisibility(View.VISIBLE);
                     apellido.setVisibility(View.VISIBLE);
